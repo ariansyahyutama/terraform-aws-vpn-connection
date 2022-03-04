@@ -23,9 +23,9 @@ resource "aws_customer_gateway" "default" {
 resource "aws_vpn_connection" "default" {
   #count                    = local.enabled ? 1 : 0
   #vpn_gateway_id           = join("", aws_vpn_gateway.default.*.id)
-  count                    = local.enabled ? length(aws_customer_gateway.default.ids) : 0
+  count                    = local.enabled ? length(aws_customer_gateway.default.*.id) : 0
   vpn_gateway_id           = aws_vpn_gateway.default.id #join("", aws_vpn_gateway.default.*.id)
-  customer_gateway_id      = element(aws_customer_gateway.default.ids[*], count.index)
+  customer_gateway_id      = element(aws_customer_gateway.default.*.id, count.index)
   type                     = "ipsec.1"
   static_routes_only       = var.vpn_connection_static_routes_only
   local_ipv4_network_cidr  = var.vpn_connection_local_ipv4_network_cidr
